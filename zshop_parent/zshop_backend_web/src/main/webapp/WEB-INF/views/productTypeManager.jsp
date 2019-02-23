@@ -3,15 +3,79 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>backend</title>
-    <link rel="stylesheet"  href="${pageContext.request.contextPath}/css/bootstrap.css" />
-    <link rel="stylesheet"  href="${pageContext.request.contextPath}/css/index.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css"/>
     <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/js/userSetting.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
+    <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/zshop.css"/>
+    <script>
+        $(function () {
+            $('#pagination').bootstrapPaginator({
+                bootstrapMajorVersion: 3,
+                currentPage:${pageInfo.pageNum},
+                totalPages:${pageInfo.pages},
+                pageUrl: function (type, page, current) {
+                    return '${pageContext.request.contextPath}/backend/productType/findAll?pageNum=' + page;
+                },
+                itemTexts: function (type, page, current) {
+                    switch (type) {
+                        case "first":
+                            return "首页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "末页";
+                        case "page":
+                            return page;
+                    }
+                },
+            });
+        });
+
+        //添加商品类型
+        function addProductType() {
+            $.post(
+                '${pageContext.request.contextPath}/backend/productType/add',
+                {'name': $('#productTypeName').val()},
+                function (result) {
+                    if (result.status == 1) {
+                        layer.msg(result.message, {
+                            time: 2000,
+                            skin: 'successMsg'
+                        });
+                    }else{
+                        layer.msg(result.message, {
+                            time: 2000,
+                            skin: 'errorMsg'
+                        });
+                    }
+                }
+            );
+        }
+        //显示商品类型
+        function showProductType(id) {
+            $.post(
+                '${pageContext.request.contextPath}/backend/productType/findById',
+                {'id':id},
+                function(result) {
+                    console.log(result);
+                    if(result.status == 1){
+                        $('#proTypeNum').val(result.data.id);
+                        $('#proTypeName').val(result.data.name);
+                    }
+                }
+            );
+        }
+    </script>
 </head>
 
 <body>
@@ -23,7 +87,7 @@
         <input type="button" value="添加商品类型" class="btn btn-primary" id="doAddProTpye">
         <br>
         <br>
-        <div class="show-list">
+        <div class="show-list" style="text-align: center">
             <table class="table table-bordered table-hover" style='text-align: center;'>
                 <thead>
                 <tr class="text-danger">
@@ -34,7 +98,7 @@
                 </tr>
                 </thead>
                 <tbody id="tb">
-                <c:forEach items="${productTypes}" var="productType">
+                <c:forEach items="${pageInfo.list}" var="productType">
                     <tr>
                         <td>${productType.id}</td>
                         <td>${productType.name}</td>
@@ -43,14 +107,21 @@
                             <c:if test="${productType.status==0}">禁用</c:if>
                         </td>
                         <td class="text-center">
-                            <input type="button" class="btn btn-warning btn-sm doProTypeModify" value="修改">
+                            <input type="button" class="btn btn-warning btn-sm doProTypeModify" value="修改" onclick="showProductType(${productType.id})">
                             <input type="button" class="btn btn-warning btn-sm doProTypeDelete" value="删除">
-                            <input type="button" class="btn btn-success btn-sm doProDisable" value="启用">
+                            <c:if test="${productType.status==1}">
+                                <input type="button" class="btn btn-danger btn-sm doProDisable" value="禁用">
+                            </c:if>
+                            <c:if test="${productType.status==0}">
+                                <input type="button" class="btn btn-success btn-sm doProDisable" value="启用">
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>
                 </tbody>
             </table>
+            <!-- 使用bootstrap分页插件 -->
+            <ul id="pagination"></ul>
         </div>
     </div>
 </div>
@@ -76,7 +147,7 @@
                 <br>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary addProductType">添加</button>
+                <button class="btn btn-primary addProductType" onclick="addProductType()">添加</button>
                 <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
             </div>
         </div>

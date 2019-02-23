@@ -1,6 +1,8 @@
 package com.lhc.zshop.service.impl;
 
+import com.lhc.zshop.common.ProductTypeConstant;
 import com.lhc.zshop.dao.ProductTypeDao;
+import com.lhc.zshop.exception.ProductTypeExistException;
 import com.lhc.zshop.pojo.ProductType;
 import com.lhc.zshop.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +23,18 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public List<ProductType> findAll(){
         return productTypeDao.selectAll();
+    }
+
+    public void add(String name) throws ProductTypeExistException{
+        ProductType productType =  productTypeDao.selectByName(name);
+        if(null != productType){
+            throw new ProductTypeExistException("商品类型已存在");
+        }
+        productTypeDao.insert(name, ProductTypeConstant.PRODUCT_TYPE_ENABLE);
+
+    }
+
+    public ProductType findById(int id){
+        return productTypeDao.selectById(id);
     }
 }
