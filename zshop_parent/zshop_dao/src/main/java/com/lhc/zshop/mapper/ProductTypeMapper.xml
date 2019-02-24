@@ -47,4 +47,10 @@
         delete from t_product_type
         where id=#{id}
     </delete>
+
+    <select id="selectByStatus" resultType="ProductType">
+        select <include refid="productTypeColumn"/>
+        from t_product_type
+        where status = #{status}
+    </select>
 </mapper>

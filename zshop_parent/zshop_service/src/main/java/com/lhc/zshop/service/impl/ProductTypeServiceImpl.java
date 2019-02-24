@@ -63,4 +63,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         }
         productTypeDao.updateStatus(id, status);
     }
+
+    @Override
+    public List<ProductType> findEnable() {
+        return productTypeDao.selectByStatus(ProductTypeConstant.PRODUCT_TYPE_ENABLE);
+    }
 }

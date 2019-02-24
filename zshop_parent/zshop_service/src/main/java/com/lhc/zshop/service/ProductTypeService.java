@@ -40,4 +40,9 @@ public interface ProductTypeService {
      * 根据id修改商品类型状态
      */
     void modifyStatus(int id);
+
+    /**
+     * 查找启用的类型
+     */
+    List<ProductType> findEnable();
 }

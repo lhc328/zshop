@@ -21,4 +21,6 @@ public interface ProductTypeDao {
     public void updateStatus(@Param("id")int id, @Param("status")int status);
 
     public void deleteById(int id);
+
+    List<ProductType> selectByStatus(int status);
 }
