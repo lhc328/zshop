@@ -25,6 +25,22 @@ public class ResponseResult {
         return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_SUCCESS, "success", data);
     }
 
+    public static ResponseResult success(String message){
+        return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_SUCCESS, message, null);
+    }
+
+    public static ResponseResult success(){
+        return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_SUCCESS, "success", null);
+    }
+
+    public static ResponseResult fail(Object data){
+        return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_SUCCESS, "success", data);
+    }
+
+    public static ResponseResult fail(String message){
+        return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_FAIL, message, null);
+    }
+
     public int getStatus() {
         return status;
     }

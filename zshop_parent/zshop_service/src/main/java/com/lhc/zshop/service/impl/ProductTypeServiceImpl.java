@@ -37,4 +37,30 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     public ProductType findById(int id){
         return productTypeDao.selectById(id);
     }
+
+    @Override
+    public void modifyName(int id, String name) throws ProductTypeExistException{
+        ProductType productType =  productTypeDao.selectByName(name);
+        if(null != productType){
+            throw new ProductTypeExistException("商品类型已存在");
+        }
+        productTypeDao.updateName(id, name);
+    }
+
+    @Override
+    public void removeById(int id) {
+        productTypeDao.deleteById(id);
+    }
+
+    @Override
+    public void modifyStatus(int id) {
+        ProductType productType = findById(id);
+        int status = productType.getStatus();
+        if(status == ProductTypeConstant.PRODUCT_TYPE_ENABLE){
+            status = ProductTypeConstant.PRODUCT_TYPE_DISABLE;
+        }else{
+            status = ProductTypeConstant.PRODUCT_TYPE_ENABLE;
+        }
+        productTypeDao.updateStatus(id, status);
+    }
 }

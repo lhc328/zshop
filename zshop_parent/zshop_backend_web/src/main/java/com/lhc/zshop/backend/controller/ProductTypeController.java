@@ -59,4 +59,29 @@ public class ProductTypeController {
         ProductType productType = productTypeService.findById(id);
         return ResponseResult.success(productType);
     }
+
+    @RequestMapping("/modifyName")
+    @ResponseBody
+    public ResponseResult modifyName(Integer id, String name){
+        try {
+            productTypeService.modifyName(id, name);
+            return ResponseResult.success("修改商品类型成功");
+        }catch (ProductTypeExistException ex){
+            return ResponseResult.fail(ex.getMessage());
+        }
+    }
+
+    @RequestMapping("/removeById")
+    @ResponseBody
+    public ResponseResult removeById(Integer id){
+        productTypeService.removeById(id);
+        return ResponseResult.success();
+    }
+
+    @RequestMapping("/modifyStatus")
+    @ResponseBody
+    public ResponseResult modifyStatus(Integer id){
+        productTypeService.modifyStatus(id);
+        return ResponseResult.success();
+    }
 }

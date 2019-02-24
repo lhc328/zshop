@@ -23,4 +23,21 @@ public interface ProductTypeService {
      * 通过id查找商品类型
      */
     ProductType findById(int id);
+
+    /**
+     * 修改商品类型名称
+     */
+    void modifyName(int id, String name) throws ProductTypeExistException;
+
+    /**
+     * 根据id删除商品类型
+     *  判断是否存在该商品类型的商品
+     *      如果存在则抛异常 不予删除
+     */
+    void removeById(int id);
+
+    /**
+     * 根据id修改商品类型状态
+     */
+    void modifyStatus(int id);
 }
