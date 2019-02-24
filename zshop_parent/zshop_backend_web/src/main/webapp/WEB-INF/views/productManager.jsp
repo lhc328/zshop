@@ -82,7 +82,7 @@
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <form action="${pageContext.request.contextPath}/backend/product/add" class="form-horizontal" method="post"  enctype=\"multipart/form-data\" id="frmAddProduct">
+        <form action="${pageContext.request.contextPath}/backend/product/add" class="form-horizontal" method="post"  enctype="multipart/form-data" id="frmAddProduct">
             <div class="modal-content">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">

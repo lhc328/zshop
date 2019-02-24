@@ -28,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void add(ProductDto productDto) throws FileUploadException{
         //1.文件上传
+        System.out.println(productDto.getFileName());
         String fileName = StringUtils.renameFileName(productDto.getFileName());
         String filePath = productDto.getUploadPath()+"/"+fileName;
         try {
