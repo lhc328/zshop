@@ -14,6 +14,11 @@
     <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
     <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
     <script src="${pageContext.request.contextPath}/js/userSetting.js"></script>
+    <script src="${pageContext.request.contextPath}/layer/layer.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrapValidator.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap-paginator.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/zshop.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrapValidator.min.css" />
     <script>
         $(function(){
             //上传图像预览
@@ -23,6 +28,92 @@
             $('#pro-image').on('change',function() {
                 $('#img2').attr('src', window.URL.createObjectURL(this.files[0]));
             });
+
+            //服务端提示消息
+            var successMsg = '${successMsg}';
+            var errorMsg = '${errorMsg}';
+            if(successMsg!=''){
+                layer.msg(successMsg,{
+                    time: 2000,
+                    skin: 'successMsg'
+                })
+            }else if(errorMsg!=''){
+                layer.msg(errorMsg,{
+                    time: 2000,
+                    skin: 'errorMsg'
+                })
+            }
+
+            //使用bootstrapValidator进行校验
+            $('#frmAddProduct').bootstrapValidator({
+               feedbackIcons: {
+                   valid: 'glyphicon glyphicon-ok',
+                   invalid: 'glyphicon glyphicon-remove',
+                   validating: 'glyphicon glyphicon-refresh'
+               },
+                fields:{
+                   name:{
+                       validators:{
+                           notEmpty:{
+                               message:'商品名称不能为空'
+                           },
+                           remote:{
+                               type: 'post',
+                               url:'${pageContext.request.contextPath}/backend/product/checkName'
+                           }
+                       }
+                   },
+                    price:{
+                       validators:{
+                           notEmpty:{
+                               message: '商品价格不能为空'
+                           },
+                           regexp:{
+                               regexp:/^\d+(\.\d+)?$/,
+                               message: '商品价格不正确'
+                           }
+                       }
+                    },
+                    file:{
+                       validators:{
+                           notEmpty:{
+                               message: '请选择商品图片'
+                           }
+                       }
+                    },
+                    productTypeId:{
+                       validators:{
+                           notEmpty:{
+                               message: '请选择商品类型'
+                           }
+                       }
+                    }
+                }
+            });
+
+            //分页
+            $('#pagination').bootstrapPaginator({
+                bootstrapMajorVersion:3,
+                currentPage:${pageInfo.pageNum},
+                totalPages:${pageInfo.pages},
+                pageUrl: function (type, page, current) {
+                    return '${pageContext.request.contextPath}/backend/product/findAll?pageNum=' + page;
+                },
+                itemTexts:function (type,page,current) {
+                    switch (type) {
+                        case "first":
+                            return "首页";
+                        case "prev":
+                            return "上一页";
+                        case "next":
+                            return "下一页";
+                        case "last":
+                            return "末页";
+                        case "page":
+                            return page;
+                    }
+                }
+            })
         });
     </script>
 </head>
@@ -36,7 +127,7 @@
         <input type="button" value="添加商品" class="btn btn-primary" id="doAddPro">
         <br>
         <br>
-        <div class="show-list">
+        <div class="show-list" style="text-align: center">
             <table class="table table-bordered table-hover" style='text-align: center;'>
                 <thead>
                 <tr class="text-danger">
@@ -49,30 +140,25 @@
                 </tr>
                 </thead>
                 <tbody id="tb">
+                <c:forEach items="${pageInfo.list}" var="product">
                 <tr>
-                    <td>1</td>
-                    <td>手机</td>
-                    <td>1999</td>
-                    <td>电子产品</td>
-                    <td>有效商品</td>
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${product.price}</td>
+                    <td>${product.productType.name}</td>
+                    <td>
+                        <c:if test="${product.productType.status==1}">有效商品</c:if>
+                        <c:if test="${product.productType.status==0}">无效商品</c:if>
+                    </td>
                     <td class="text-center">
                         <input type="button" class="btn btn-warning btn-sm doProModify" value="修改">
                         <input type="button" class="btn btn-warning btn-sm doProDelete" value="删除">
                     </td>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>平板</td>
-                    <td>2999</td>
-                    <td>电子产品</td>
-                    <td>有效商品</td>
-                    <td class="text-center">
-                        <input type="button" class="btn btn-warning btn-sm doProModify" value="修改">
-                        <input type="button" class="btn btn-warning btn-sm doProDelete" value="删除">
-                    </td>
-                </tr>
+                </c:forEach>
                 </tbody>
             </table>
+            <ul id="pagination"></ul>
         </div>
     </div>
 </div>

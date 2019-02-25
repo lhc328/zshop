@@ -16,6 +16,7 @@ import org.springframework.util.StreamUtils;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 
 @Service
@@ -50,5 +51,19 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return productDao.selectAll();
+    }
+
+    @Override
+    public boolean checkName(String name) {
+        Product product = productDao.selectByName(name);
+        if(product!=null) {
+            return false;
+        }
+        return true;
     }
 }
