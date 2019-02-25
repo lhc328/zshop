@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 public class ProductDto {
 
+    private Integer id;
     private String name;
     private Double price;
     private Integer productTypeId;
@@ -11,6 +12,14 @@ public class ProductDto {
     private String fileName;        //文件名称
     private String uploadPath;      //文件上传路径
 
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

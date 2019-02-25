@@ -14,8 +14,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 
@@ -54,6 +56,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product findById(int id) {
+        return productDao.selectById(id);
+    }
+
+    @Override
     public List<Product> findAll() {
         return productDao.selectAll();
     }
@@ -65,5 +72,50 @@ public class ProductServiceImpl implements ProductService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void removeById(int id) {
+
+    }
+
+    @Override
+    public void update(Product product) {
+
+    }
+
+    @Override
+    public void getImage(String path, OutputStream outputStream) {
+        try {
+            StreamUtils.copy(new FileInputStream(path), outputStream);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void modify(ProductDto productDto) throws FileUploadException {
+        System.out.println(productDto.getFileName());
+        String fileName = StringUtils.renameFileName(productDto.getFileName());
+        String filePath = productDto.getUploadPath()+"/"+fileName;
+        try {
+            StreamUtils.copy(productDto.getInputStream(), new FileOutputStream(filePath));
+        }catch (IOException e){
+            throw new FileUploadException("文件上传失败"+e.getMessage());
+        }
+
+        //2.保存到数据库
+        try {
+            Product product = new Product();
+            PropertyUtils.copyProperties(product, productDto);
+            product.setImage(filePath);
+            ProductType productType = new ProductType();
+            productType.setId(productDto.getProductTypeId());
+            product.setProductType(productType);
+            System.out.println(product.getId());
+            productDao.update(product);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 }

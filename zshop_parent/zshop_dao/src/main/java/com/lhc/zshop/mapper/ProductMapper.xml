@@ -67,7 +67,8 @@
             price=#{price},
             info=#{info},
             image=#{image},
-            product_type_id=#{product_type_id}
+            product_type_id=#{productType.id}
+        where id=#{id}
     </update>
 
     <delete id="deleteById" >

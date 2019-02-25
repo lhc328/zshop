@@ -113,8 +113,26 @@
                             return page;
                     }
                 }
-            })
+            });
+
         });
+
+        //显示商品信息
+        function showProduct(id) {
+            $.post(
+                '${pageContext.request.contextPath}/backend/product/findById',
+                {'id':id},
+                function (result) {
+                    if(result.status == 1){
+                        $('#pro-num').val(result.data.id);
+                        $('#pro-name').val(result.data.name);
+                        $('#pro-price').val(result.data.price);
+                        $('#pro-TypeId').val(result.data.productType.id);
+                        $('#img2').attr('src','${pageContext.request.contextPath}/backend/product/getImage?path='+result.data.image);
+                    }
+                }
+            )
+        };
     </script>
 </head>
 
@@ -151,7 +169,7 @@
                         <c:if test="${product.productType.status==0}">无效商品</c:if>
                     </td>
                     <td class="text-center">
-                        <input type="button" class="btn btn-warning btn-sm doProModify" value="修改">
+                        <input type="button" class="btn btn-warning btn-sm doProModify" value="修改" onclick="showProduct(${product.id})">
                         <input type="button" class="btn btn-warning btn-sm doProDelete" value="删除">
                     </td>
                 </tr>
@@ -230,7 +248,7 @@
     <!-- 窗口声明 -->
     <div class="modal-dialog modal-lg">
         <!-- 内容声明 -->
-        <form action="" class="form-horizontal">
+        <form action="${pageContext.request.contextPath}/backend/product/modify" method="post" enctype="multipart/form-data" class="form-horizontal">
             <div class="modal-content">
                 <!-- 头部、主体、脚注 -->
                 <div class="modal-header">
@@ -240,21 +258,22 @@
                 <div class="modal-body text-center row">
                     <div class="col-sm-8">
                         <div class="form-group">
+                            <input type="hidden" name="pageNum" value="${pageInfo.pageNum}">
                             <label for="pro-num" class="col-sm-4 control-label">商品编号：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="pro-num" readonly>
+                                <input type="text" class="form-control" id="pro-num" name="id" readonly>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="pro-name" class="col-sm-4 control-label">商品名称：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="pro-name">
+                                <input type="text" class="form-control" id="pro-name" name="name">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="pro-price" class="col-sm-4 control-label">商品价格：</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="pro-price">
+                                <input type="text" class="form-control" id="pro-price" name="price">
                             </div>
                         </div>
                         <div class="form-group">
@@ -266,9 +285,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="product-type" class="col-sm-4 control-label">商品类型：</label>
+                            <label class="col-sm-4 control-label">商品类型：</label>
                             <div class="col-sm-8">
-                                <select class="form-control">
+                                <select class="form-control" id="pro-TypeId" name="productTypeId">
                                     <option>--请选择--</option>
                                     <c:forEach items="${productTypes}" var="productType">
                                         <option value="${productType.id}">${productType.name}</option>
@@ -283,7 +302,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary updatePro">修改</button>
+                    <button class="btn btn-primary updatePro" type="submit">修改</button>
                     <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
                 </div>
             </div>

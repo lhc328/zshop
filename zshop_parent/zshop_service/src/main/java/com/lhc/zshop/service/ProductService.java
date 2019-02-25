@@ -4,6 +4,7 @@ import com.lhc.zshop.dto.ProductDto;
 import com.lhc.zshop.pojo.Product;
 import org.apache.commons.fileupload.FileUploadException;
 
+import java.io.OutputStream;
 import java.util.List;
 
 public interface ProductService {
@@ -13,4 +14,14 @@ public interface ProductService {
     public boolean checkName(String name);
 
     List<Product> findAll();
+
+    Product findById(int id);
+
+    void removeById(int id);
+
+    void update(Product product);
+
+    void getImage(String path, OutputStream outputStream);
+
+    void modify(ProductDto productDto) throws FileUploadException;
 }

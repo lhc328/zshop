@@ -10,6 +10,7 @@ import com.lhc.zshop.pojo.Product;
 import com.lhc.zshop.pojo.ProductType;
 import com.lhc.zshop.service.ProductService;
 import com.lhc.zshop.service.ProductTypeService;
+import com.lhc.zshop.util.ResponseResult;
 import javafx.scene.control.Pagination;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.ibatis.annotations.Param;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +58,7 @@ public class ProductController {
     }
 
     @RequestMapping("/add")
-    public String add(ProductVo productVo,  HttpSession session, Model model){
+    public String add(ProductVo productVo, Integer pageNum, HttpSession session, Model model){
         String uploadPath = session.getServletContext().getRealPath("/WEB-INF/upload");
         try {
             //将vo转化成dto
@@ -73,7 +75,7 @@ public class ProductController {
             model.addAttribute("errorMsg", ex.getMessage());
         }
 
-        return "forward:findAll";
+        return "forward:findAll?pageNum=" + pageNum;
     }
 
     @RequestMapping("/checkName")
@@ -89,4 +91,36 @@ public class ProductController {
         return map;
     }
 
+    @RequestMapping("/findById")
+    @ResponseBody
+    public ResponseResult findById(Integer id){
+        Product product = productService.findById(id);
+        return ResponseResult.success(product);
+    }
+
+    @RequestMapping("/getImage")
+    public void getImage(String path, OutputStream outputStream){
+        productService.getImage(path,outputStream);
+    }
+
+    @RequestMapping("/modify")
+    public String modify(ProductVo productVo, Integer pageNum ,HttpSession session, Model model){
+        String uploadPath = session.getServletContext().getRealPath("/WEB-INF/upload");
+        try {
+            //将vo转化成dto
+            ProductDto productDto = new ProductDto();
+            PropertyUtils.copyProperties(productDto, productVo);    //对象间属性的拷贝
+            System.out.println(productVo.getFile().getOriginalFilename());
+            productDto.setInputStream(productVo.getFile().getInputStream());
+            productDto.setFileName(productVo.getFile().getOriginalFilename());
+            productDto.setUploadPath(uploadPath);
+            productService.modify(productDto);
+            model.addAttribute("successMsg", "修改成功");
+        }catch (Exception ex){
+            ex.printStackTrace();
+            model.addAttribute("errorMsg", ex.getMessage());
+        }
+
+        return "forward:findAll?pageNum="+pageNum;
+    }
 }
