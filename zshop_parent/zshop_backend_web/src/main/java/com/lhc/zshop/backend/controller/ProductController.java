@@ -123,4 +123,11 @@ public class ProductController {
 
         return "forward:findAll?pageNum="+pageNum;
     }
+
+    @RequestMapping("/removeById")
+    @ResponseBody
+    public ResponseResult removeMyId(Integer id){
+        productService.removeById(id);
+        return ResponseResult.success();
+    }
 }

@@ -76,13 +76,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void removeById(int id) {
-
+        productDao.deleteById(id);
     }
 
-    @Override
-    public void update(Product product) {
-
-    }
 
     @Override
     public void getImage(String path, OutputStream outputStream) {

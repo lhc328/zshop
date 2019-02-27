@@ -19,8 +19,6 @@ public interface ProductService {
 
     void removeById(int id);
 
-    void update(Product product);
-
     void getImage(String path, OutputStream outputStream);
 
     void modify(ProductDto productDto) throws FileUploadException;

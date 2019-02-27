@@ -133,6 +133,30 @@
                 }
             )
         };
+
+        //显示删除modal
+        function showDeleteModal(id) {
+            $('#deleteProductId').val(id);
+            $('#deleteProductModal').modal('show');
+        }
+        
+        //删除商品
+        function deleteProduct(){
+            $.post(
+                '${pageContext.request.contextPath}/backend/product/removeById',
+                {'id':$('#deleteProductId').val()},
+                function(result){
+                    if(result.status==1){
+                        layer.msg('删除成功',{
+                            time:2000,
+                            skin:'successMsg'
+                        }, function () {
+                            location.href = '${pageContext.request.contextPath}/backend/product/findAll?pageNum='+${pageInfo.pageNum}
+                        })
+                    }
+                }
+            )
+        }
     </script>
 </head>
 
@@ -170,7 +194,7 @@
                     </td>
                     <td class="text-center">
                         <input type="button" class="btn btn-warning btn-sm doProModify" value="修改" onclick="showProduct(${product.id})">
-                        <input type="button" class="btn btn-warning btn-sm doProDelete" value="删除">
+                        <input type="button" class="btn btn-warning btn-sm doProDelete" value="删除" onclick="showDeleteModal(${product.id})">
                     </td>
                 </tr>
                 </c:forEach>
@@ -310,6 +334,31 @@
     </div>
 </div>
     <!-- 修改商品 end -->
+
+<!-- 确认删除商品 start -->
+<div class="modal fade" tabindex="-1" id="deleteProductModal">
+    <!-- 窗口声明 -->
+    <div class="modal-dialog modal-lg">
+        <!-- 内容声明 -->
+            <div class="modal-content">
+                <!-- 头部、主体、脚注 -->
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">提示消息</h4>
+                </div>
+                <div class="modal-body text-center row">
+                    <h4>确认删除该商品</h4>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="deleteProductId"/>
+                    <button class="btn btn-primary updatePro"  onclick="deleteProduct()" data-dismiss="modal">确定</button>
+                    <button class="btn btn-primary cancel" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+    </div>
+</div>
+<!-- 确认删除商品 end -->
+
 </body>
 
 </html>
