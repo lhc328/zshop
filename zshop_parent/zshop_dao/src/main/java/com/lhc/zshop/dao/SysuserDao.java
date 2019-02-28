@@ -1,5 +1,6 @@
 package com.lhc.zshop.dao;
 
+import com.lhc.zshop.params.SysuserParam;
 import com.lhc.zshop.pojo.Sysuser;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +18,5 @@ public interface SysuserDao {
 
     public void updateStatus(@Param("id")int id, @Param("isValid")int isValid);
 
+    public List<Sysuser> selectByParams(SysuserParam sysuserParam);
 }

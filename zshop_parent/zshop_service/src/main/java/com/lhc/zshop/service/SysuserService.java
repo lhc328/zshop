@@ -1,6 +1,8 @@
 package com.lhc.zshop.service;
 
+import com.lhc.zshop.params.SysuserParam;
 import com.lhc.zshop.pojo.Sysuser;
+import com.lhc.zshop.vo.SysuserVo;
 
 import java.util.List;
 
@@ -10,9 +12,11 @@ public interface SysuserService {
 
     public Sysuser findById(int id);
 
-    public void add(Sysuser sysuser);
+    public void add(SysuserVo sysuserVo);
 
     public void modify(Sysuser sysuser);
 
-    public void modifyStatus(int id, int isValid);
+    public void modifyStatus(int id);
+
+    public List<Sysuser> findParams(SysuserParam sysuserParam);
 }
