@@ -4,6 +4,7 @@ package com.lhc.zshop.backend.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lhc.zshop.common.PaginationConstant;
+import com.lhc.zshop.exception.SysuserNotExistException;
 import com.lhc.zshop.params.SysuserParam;
 import com.lhc.zshop.pojo.Role;
 import com.lhc.zshop.pojo.Sysuser;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -32,8 +34,15 @@ public class SysuserController {
     private RoleService roleService;
 
     @RequestMapping("/login")
-    public String login(){
-        return "main";
+    public String login(String loginName, String password, HttpSession session, Model model){
+        try{
+            Sysuser sysuser = sysuserService.login(loginName, password);
+            session.setAttribute("sysuser", sysuser);
+            return "main";
+        }catch (SysuserNotExistException e){
+            model.addAttribute("errorMsg", e.getMessage());
+            return "login";
+        }
     }
 
     @RequestMapping("/findAll")
@@ -79,4 +88,5 @@ public class SysuserController {
         sysuserService.modifyStatus(id);
         return ResponseResult.success();
     }
+
 }

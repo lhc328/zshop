@@ -2,6 +2,7 @@ package com.lhc.zshop.service.impl;
 
 import com.lhc.zshop.common.SysuserConstant;
 import com.lhc.zshop.dao.SysuserDao;
+import com.lhc.zshop.exception.SysuserNotExistException;
 import com.lhc.zshop.params.SysuserParam;
 import com.lhc.zshop.pojo.Role;
 import com.lhc.zshop.pojo.Sysuser;
@@ -75,5 +76,14 @@ public class SysuserServiceImpl implements SysuserService {
     @Override
     public List<Sysuser> findParams(SysuserParam sysuserParam) {
         return sysuserDao.selectByParams(sysuserParam);
+    }
+
+    @Override
+    public Sysuser login(String loginName, String password) throws SysuserNotExistException {
+        Sysuser sysuser = sysuserDao.selectByLoginNameAndPassword(loginName, password, SysuserConstant.SYSUSER_VALID);
+        if(sysuser != null){
+            return  sysuser;
+        }
+        throw new SysuserNotExistException("用户名或密码错误");
     }
 }

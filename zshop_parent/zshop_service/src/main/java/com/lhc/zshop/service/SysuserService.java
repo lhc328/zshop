@@ -1,5 +1,6 @@
 package com.lhc.zshop.service;
 
+import com.lhc.zshop.exception.SysuserNotExistException;
 import com.lhc.zshop.params.SysuserParam;
 import com.lhc.zshop.pojo.Sysuser;
 import com.lhc.zshop.vo.SysuserVo;
@@ -19,4 +20,6 @@ public interface SysuserService {
     public void modifyStatus(int id);
 
     public List<Sysuser> findParams(SysuserParam sysuserParam);
+
+    public Sysuser login(String loginName, String password) throws SysuserNotExistException;
 }

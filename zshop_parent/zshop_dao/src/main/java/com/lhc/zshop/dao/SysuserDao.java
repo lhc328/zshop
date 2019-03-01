@@ -19,4 +19,6 @@ public interface SysuserDao {
     public void updateStatus(@Param("id")int id, @Param("isValid")int isValid);
 
     public List<Sysuser> selectByParams(SysuserParam sysuserParam);
+
+    public Sysuser selectByLoginNameAndPassword(@Param("loginName") String loginName, @Param("password") String password,@Param("isValid") Integer isValid);
 }

@@ -78,6 +78,13 @@
           </where>
     </select>
 
+    <select id="selectByLoginNameAndPassword" resultMap="sysuserMap">
+        select s.id, s.name, s.login_name, s.password, s.phone, s.email, s.is_valid, s.create_date, s.role_id, r.id 'r.id', r.role_name
+        from t_sysuser s
+            left join t_role r on s.role_id = r.id
+          where login_name = #{loginName} and password= #{password} and is_valid=#{isValid}
+    </select>
+
     <insert id="insert" parameterType="Sysuser">
         insert into t_sysuser
         (name, login_name, password, phone, email, is_valid, create_date, role_id)
