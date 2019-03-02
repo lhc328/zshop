@@ -33,8 +33,12 @@ public class ResponseResult {
         return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_SUCCESS, "success", null);
     }
 
+    public static ResponseResult fail(){
+        return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_FAIL, "fail", null);
+    }
+
     public static ResponseResult fail(Object data){
-        return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_SUCCESS, "success", data);
+        return new ResponseResult(ResponseResultConstant.RESPONSE_STATUS_FAIL, "fail", data);
     }
 
     public static ResponseResult fail(String message){

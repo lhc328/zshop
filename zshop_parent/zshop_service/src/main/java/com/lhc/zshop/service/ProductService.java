@@ -1,6 +1,7 @@
 package com.lhc.zshop.service;
 
 import com.lhc.zshop.dto.ProductDto;
+import com.lhc.zshop.params.ProductParam;
 import com.lhc.zshop.pojo.Product;
 import org.apache.commons.fileupload.FileUploadException;
 
@@ -22,4 +23,6 @@ public interface ProductService {
     void getImage(String path, OutputStream outputStream);
 
     void modify(ProductDto productDto) throws FileUploadException;
+
+    List<Product> findByParams(ProductParam productParam);
 }

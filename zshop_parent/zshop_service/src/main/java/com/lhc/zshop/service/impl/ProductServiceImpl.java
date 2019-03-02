@@ -2,6 +2,7 @@ package com.lhc.zshop.service.impl;
 
 import com.lhc.zshop.dao.ProductDao;
 import com.lhc.zshop.dto.ProductDto;
+import com.lhc.zshop.params.ProductParam;
 import com.lhc.zshop.pojo.Product;
 import com.lhc.zshop.pojo.ProductType;
 import com.lhc.zshop.service.ProductService;
@@ -113,5 +114,10 @@ public class ProductServiceImpl implements ProductService {
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Product> findByParams(ProductParam productParam) {
+        return productDao.selectByParams(productParam);
     }
 }

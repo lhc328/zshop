@@ -7,4 +7,7 @@ public interface PaginationConstant {
 
     //页大小
     public static final int PAGE_SIZE = 5;
+
+    //前台页大小
+    public static final int PAGE_SIZE_FRONT=8;
 }

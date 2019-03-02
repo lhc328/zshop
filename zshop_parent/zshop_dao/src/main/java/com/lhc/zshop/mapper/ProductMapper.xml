@@ -61,6 +61,28 @@
         where id = #{id}
     </select>
 
+    <select id="selectByParams" parameterType="com.lhc.zshop.params.ProductParam" resultMap="productMap">
+        select <include refid="productColumn" />
+        from t_product
+        <where>
+            <if test="name!=null and name!=''">
+                name like concat(concat('%', #{name}),'%')
+            </if>
+            <if test="minPrice!=null and maxPrice!=null">
+                and price between #{minPrice} and #{maxPrice}
+            </if>
+            <if test="minPrice!=null">
+                and price &gt;= #{minPrice}
+            </if>
+            <if test="maxPrice!=null">
+                and price &lt;= #{minPrice}
+            </if>
+            <if test="productTypeId!=null and productTypeId != -1">
+                and product_type_id = #{productTypeId}
+            </if>
+        </where>
+    </select>
+
     <update id="update" parameterType="Product">
         update t_product
         set name=#{name},

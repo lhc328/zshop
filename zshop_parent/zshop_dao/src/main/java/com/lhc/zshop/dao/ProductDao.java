@@ -1,5 +1,6 @@
 package com.lhc.zshop.dao;
 
+import com.lhc.zshop.params.ProductParam;
 import com.lhc.zshop.pojo.Product;
 import com.lhc.zshop.pojo.ProductType;
 
@@ -18,4 +19,6 @@ public interface ProductDao {
     public void update(Product product);
 
     public void deleteById(int id);
+
+    public List<Product> selectByParams(ProductParam productParam);
 }
